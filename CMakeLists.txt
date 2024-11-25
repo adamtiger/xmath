@@ -4,6 +4,7 @@ project(XMath CXX)
 message("Start generating!")
 
 option(BUILD_WITH_ASSERT "Whether to assert when needed" ON)
+option(BUILD_SHARED "Whether to create a dynamically linked library" OFF)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
@@ -13,6 +14,11 @@ IF (BUILD_WITH_ASSERT)
     add_compile_definitions(AC_WITH_ASSERT)
 	message("Compile with asserts")
 ENDIF(BUILD_WITH_ASSERT)
+
+IF (BUILD_SHARED)
+    add_compile_definitions(EXPORT_DLL)
+	message("Compile shared")
+ENDIF(BUILD_SHARED)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
@@ -31,11 +37,13 @@ set(XMATH_ROOT ${CMAKE_CURRENT_LIST_DIR})
 set(SRCS_DIR ${XMATH_ROOT}/srcs)
 
 set (SRCS_SRCS
-
+    ${SRCS_DIR}/exp.cpp
 )
 
 set (SRCS_HEADERS
     ${SRCS_DIR}/core.hpp
+    ${SRCS_DIR}/math.hpp
+    ${SRCS_DIR}/exp.hpp
 )
 
 source_group("srcs" FILES ${SRCS_HEADERS} ${SRCS_SRCS})
