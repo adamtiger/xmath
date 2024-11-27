@@ -15,7 +15,9 @@ f32 exponent(const f32 x)
     f32 z1 = (z - static_cast<f32>(zi0)) * 0.5f;
     zi0 = zi0 * (1 - 2 * is_z_neg);
 
-    f32 y0 = static_cast<f32>(2 << (zi0 - 1));
+    f32 y0 = 1.f;
+    if (zi0 > 0)  // rare
+        y0 = static_cast<f32>(2 << (zi0 - 1));
 
     // taylor-series for the remainder
     f32 xln2 = z1 * C_LN_2;
