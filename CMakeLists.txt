@@ -38,12 +38,14 @@ set(SRCS_DIR ${XMATH_ROOT}/srcs)
 
 set (SRCS_SRCS
     ${SRCS_DIR}/exp.cpp
+    ${SRCS_DIR}/log.cpp
 )
 
 set (SRCS_HEADERS
     ${SRCS_DIR}/core.hpp
     ${SRCS_DIR}/math.hpp
     ${SRCS_DIR}/exp.hpp
+    ${SRCS_DIR}/log.hpp
 )
 
 source_group("srcs" FILES ${SRCS_HEADERS} ${SRCS_SRCS})
