@@ -24,6 +24,20 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 
 # architecture identification
+option(BW_NO_INTRISICS "AVX512 intrinsic usage" ON)
+option(BW_AVX512 "AVX512 intrinsic usage" OFF)
+option(BW_NEON "ARM NEON intrinsic usage" OFF)
+
+IF (BW_NO_INTRISICS)
+    add_compile_definitions(INTRIN_NO)
+    message("No intrinsics")
+ELSEIF (BW_AVX512)
+    add_compile_definitions(INTRIN_AVX512)
+    message("AVX512 intrinsics")
+ELSEIF (BW_NEON)
+    add_compile_definitions(INTRIN_NEON)
+    message("ARM NEON intrinsics")
+ENDIF()
 
 
 
@@ -37,18 +51,58 @@ set(XMATH_ROOT ${CMAKE_CURRENT_LIST_DIR})
 set(SRCS_DIR ${XMATH_ROOT}/srcs)
 
 set (SRCS_SRCS
-    ${SRCS_DIR}/exp.cpp
-    ${SRCS_DIR}/log.cpp
 )
 
 set (SRCS_HEADERS
     ${SRCS_DIR}/core.hpp
+    ${SRCS_DIR}/device.hpp
     ${SRCS_DIR}/math.hpp
     ${SRCS_DIR}/exp.hpp
     ${SRCS_DIR}/log.hpp
 )
 
 source_group("srcs" FILES ${SRCS_HEADERS} ${SRCS_SRCS})
+
+
+# cpu x64 (default implementation)
+
+set(X64_DIR ${XMATH_ROOT}/srcs/x64)
+
+set (X64_SRCS
+    ${X64_DIR}/exp.cpp
+    ${X64_DIR}/log.cpp
+)
+
+set (X64_HEADERS
+)
+
+source_group("x64" FILES ${X64_HEADERS} ${X64_SRCS})
+
+
+# cpu avx512
+
+set(AVX512_DIR ${XMATH_ROOT}/srcs/avx512)
+
+set (AVX512_SRCS
+    ${AVX512_DIR}/exp.cpp
+    ${AVX512_DIR}/log.cpp
+)
+
+set (AVX512_HEADERS
+)
+
+source_group("avx512" FILES ${AVX512_HEADERS} ${AVX512_SRCS})
+
+
+IF (BW_NO_INTRISICS)
+    set(INTRINSIC_SRCS ${X64_SRCS})
+	set(INTRINSIC_HEADERS ${X64_HEADERS})
+ELSEIF (BW_AVX512)
+    set(INTRINSIC_SRCS ${AVX512_SRCS})
+	set(INTRINSIC_HEADERS ${AVX512_HEADERS})
+ELSEIF (BW_NEON)
+    
+ENDIF()
 
 
 # tests
@@ -68,11 +122,13 @@ source_group("tests" FILES ${TEST_HEADERS} ${TEST_SRCS})
 # set all sources
 set (SOURCES
     ${SRCS_SRCS}
+    ${INTRINSIC_SRCS}
     ${TEST_SRCS}
 )
 
 set (HEADERS
     ${SRCS_HEADERS}
+    ${INTRINSIC_HEADERS}
     ${TEST_HEADERS}
 )
 
@@ -85,6 +141,7 @@ add_executable(xmath ${SOURCES} ${HEADERS})
 target_include_directories(xmath PUBLIC ${SRCS_DIR} ${TEST_DIR})
 
 if (MSVC)
+    target_compile_options(xmath PUBLIC "-mfma" "-mavx512f" "-mavx512bw" "-mavx512vl")
     target_link_options(xmath PUBLIC "/NODEFAULTLIB:libcmt.lib")
 endif()
 
