@@ -2,6 +2,7 @@
 
 // common includes
 #include <iostream>
+#include <random>
 
 // function prefix
 #if defined(_WIN64) && defined(EXPORT_DLL)
@@ -34,6 +35,9 @@ static_assert(sizeof(u64) == 8, "u64 expected to be 8 bytes");
 static_assert(sizeof(u32) == 4, "u32 expected to be 4 bytes");
 static_assert(sizeof(u16) == 2, "u16 expected to be 2 bytes");
 static_assert(sizeof(u8) == 1, "u8 expected to be 1 bytes");
+
+// helper structures for alignment
+struct f512 { f32 data[16]; };
 
 // frequent contants
 constexpr f32 C_LOG2_E = 1.44269504f;

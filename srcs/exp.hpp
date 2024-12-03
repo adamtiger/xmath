@@ -2,6 +2,4 @@
 
 #include "core.hpp"
 
-XMATH_API f64 exponent(const f64 x);
-XMATH_API f32 exponent(const f32 x);
-
+XMATH_API void exponent(const i32 length, const f32* x, f32* y);

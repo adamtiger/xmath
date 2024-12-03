@@ -24,8 +24,8 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 
 # architecture identification
-option(BW_NO_INTRISICS "AVX512 intrinsic usage" ON)
-option(BW_AVX512 "AVX512 intrinsic usage" OFF)
+option(BW_NO_INTRISICS "AVX512 intrinsic usage" OFF)
+option(BW_AVX512 "AVX512 intrinsic usage" ON)
 option(BW_NEON "ARM NEON intrinsic usage" OFF)
 
 IF (BW_NO_INTRISICS)
