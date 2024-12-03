@@ -37,7 +37,7 @@ static_assert(sizeof(u16) == 2, "u16 expected to be 2 bytes");
 static_assert(sizeof(u8) == 1, "u8 expected to be 1 bytes");
 
 // helper structures for alignment
-struct f512 { f32 data[16]; };
+struct alignas(64) f512 { f32 data[16]; };
 
 // frequent contants
 constexpr f32 C_LOG2_E = 1.44269504f;

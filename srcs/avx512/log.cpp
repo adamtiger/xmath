@@ -1,46 +1,48 @@
 #include "log.hpp"
+#include "device.hpp"
 
-inline f32 _logarithm(const f32 x)
+inline void _logarithm(const f32* x, f32* y)
 {
+    // load the next 16 elements
+    __m512 x16 = _mm512_load_ps(x);
+
     // calculate the highest log2 integer part
     // and the multiplier
-    u32 exp_mask = 255;
+    i32 exp_mask = 255;
     exp_mask = exp_mask << 23;
-    const u32 x_u32 = *reinterpret_cast<const u32*>(&x); 
+    __m512i emi16 = _mm512_set1_epi32(exp_mask);
+    __m512i xi16 = _mm512_castps_si512(x16);
 
-    u32 log2_x_int = x_u32 & exp_mask;
-    f32 log2_x_float = *reinterpret_cast<f32*>(&log2_x_int);
+    __m512i log2_xi16 = _mm512_and_epi32(xi16, emi16);
+    __m512 log2_x16 = _mm512_castsi512_ps(log2_xi16);
 
-    f32 x1 = x / log2_x_float;  // [1, 2)
-
-    // calculate the logarithm for the remaining ratio
-    // Taylor-series (not accurate enough)
-    // x1 = x1 - 1.f;
-    // f32 y1 = -x1 / 6.f + 1.f / 5.f;
-    // y1 = y1 * x1 - 1.f / 4.f;
-    // y1 = y1 * x1 + 1.f / 3.f;
-    // y1 = y1 * x1 - 1.f / 2.f;
-    // y1 = y1 * x1 + 1.f;
-    // y1 = y1 * x1;
+    __m512 x1 = _mm512_div_ps(x16, log2_x16);  // [1, 2)
 
     // calculate the logarithm for the remaining ratio
     // approximation (https://stackoverflow.com/questions/9799041/efficient-implementation-of-natural-logarithm-ln-and-exponentiation)
     // -1.7417939 + (2.8212026 + (-1.4699568 + (0.44717955 - 0.056570851 * x) * x) * x) * x
     // with Remez-algorithm or similar, this can be even better
-    f32 y1 = 0.44717955f - 0.056570851f * x1;
-    y1 = -1.4699568f + y1 * x1;
-    y1 = 2.8212026f + y1 * x1;
-    y1 = -1.7417939f + y1 * x1;
+    __m512 y1 = _mm512_sub_ps(_mm512_set1_ps(0.44717955f), _mm512_mul_ps(_mm512_set1_ps(0.056570851f), x1));
+    y1 = _mm512_add_ps(_mm512_set1_ps(-1.4699568f), _mm512_mul_ps(y1, x1));
+    y1 = _mm512_add_ps(_mm512_set1_ps(2.8212026f), _mm512_mul_ps(y1, x1));
+    y1 = _mm512_add_ps(_mm512_set1_ps(-1.7417939f), _mm512_mul_ps(y1, x1));
 
-    f32 y0 = static_cast<f32>(i32(log2_x_int >> 23) - 127);
-    f32 y = y0 * C_LN_2 + y1;
-    return y;
+    __m512 y0 = _mm512_cvt_roundepi32_ps(
+        _mm512_sub_epi32(
+            _mm512_srli_epi32(log2_xi16, 23), 
+            _mm512_set1_epi32(127)
+        ), (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)
+    ); 
+
+    __m512 y16 = _mm512_add_ps(_mm512_mul_ps(y0, _mm512_set1_ps(C_LN_2)), y1);
+    
+    _mm512_store_ps(y, y16);
 }
 
 void logarithm(const i32 length, const f32* x, f32* y)
 {
-    for (int ix = 0; ix < length; ++ix)
+    for (int ix = 0; ix < length; ix+=16)
     {
-        y[ix] = _logarithm(x[ix]);
+        _logarithm(x + ix, y + ix);
     }
 }
