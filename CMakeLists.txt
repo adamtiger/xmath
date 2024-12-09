@@ -94,14 +94,30 @@ set (AVX512_HEADERS
 source_group("avx512" FILES ${AVX512_HEADERS} ${AVX512_SRCS})
 
 
+# cpu arm neon
+
+set(NEON_DIR ${XMATH_ROOT}/srcs/neon)
+
+set (NEON_SRCS
+    ${NEON_DIR}/exp.cpp
+    ${NEON_DIR}/log.cpp
+)
+
+set (NEON_HEADERS
+)
+
+source_group("armneon" FILES ${NEON_HEADERS} ${NEON_SRCS})
+
+
 IF (BW_NO_INTRISICS)
     set(INTRINSIC_SRCS ${X64_SRCS})
-	set(INTRINSIC_HEADERS ${X64_HEADERS})
+    set(INTRINSIC_HEADERS ${X64_HEADERS})
 ELSEIF (BW_AVX512)
     set(INTRINSIC_SRCS ${AVX512_SRCS})
-	set(INTRINSIC_HEADERS ${AVX512_HEADERS})
+    set(INTRINSIC_HEADERS ${AVX512_HEADERS})
 ELSEIF (BW_NEON)
-    
+    set(INTRINSIC_SRCS ${NEON_SRCS})
+    set(INTRINSIC_HEADERS ${NEON_HEADERS})
 ENDIF()
 
 
@@ -143,6 +159,8 @@ target_include_directories(xmath PUBLIC ${SRCS_DIR} ${TEST_DIR})
 if (MSVC)
     target_compile_options(xmath PUBLIC "-mfma" "-mavx512f" "-mavx512bw" "-mavx512vl")
     target_link_options(xmath PUBLIC "/NODEFAULTLIB:libcmt.lib")
+elseif (LINUX)
+    target_compile_options(xmath PUBLIC "-mfpu=neon")
 endif()
 
 message("Finished")
