@@ -160,7 +160,7 @@ if (MSVC)
     target_compile_options(xmath PUBLIC "-mfma" "-mavx512f" "-mavx512bw" "-mavx512vl")
     target_link_options(xmath PUBLIC "/NODEFAULTLIB:libcmt.lib")
 elseif (LINUX)
-    target_compile_options(xmath PUBLIC "-mfpu=neon")
+    #target_compile_options(xmath PUBLIC "-mfpu=neon")  # neon is compulsory for aarch64
 endif()
 
 message("Finished")

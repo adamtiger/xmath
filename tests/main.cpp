@@ -28,7 +28,7 @@ int main()
 
     for (i32 ix = 0; ix < length; ++ix)
     {
-        std::cout << "Index: " << ix << " - Expected: " << logf(x[ix]) << " - Actual: " << y[ix] << std::endl;
+        std::cout << "Index: " << ix << " - Expected: " << logf(x[ix]) << " - Actual: " << y[ix] << " - Value: " << x[ix] << std::endl;
     }
 
     return 0;

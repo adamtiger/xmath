@@ -12,9 +12,9 @@ struct f32x4 { f32 data[4]; };
 
 #include "immintrin.h"
 
-using f32x16 = __m512;
-using f32x8 = __m256;
-using f32x4 = __m128;
+#elif defined(INTRIN_NEON)
+
+#include "arm_neon.h"
 
 #endif
 
