@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __CORE__
+#define __CORE__
 
 // common includes
 #include <iostream>
@@ -42,3 +43,5 @@ struct alignas(64) f512 { f32 data[16]; };
 // frequent contants
 constexpr f32 C_LOG2_E = 1.44269504f;
 constexpr f32 C_LN_2 = 0.69314718f;
+
+#endif 

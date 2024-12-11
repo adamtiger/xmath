@@ -12,7 +12,6 @@ static void fill_array(const f32 vmin, const f32 vmax, const i32 length, f32* ar
     }
 }
 
-
 int main()
 {
     std::cout << "XMath implementations with intrinsics." << std::endl;
