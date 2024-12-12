@@ -32,7 +32,7 @@ inline f32 _logarithm(const f32 x)
     y1 = 2.8212026f + y1 * x1;
     y1 = -1.7417939f + y1 * x1;
 
-    f32 y0 = static_cast<f32>(i32(log2_x_int >> 23) - 127);
+    f32 y0 = static_cast<f32>(i32(log2_x_int >> 23) - C_F32_BIAS);
     f32 y = y0 * C_LN_2 + y1;
     return y;
 }

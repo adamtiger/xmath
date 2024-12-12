@@ -35,10 +35,9 @@ inline void _logarithm(const f32* x, f32* y)
     y1 = vaddq_f32(vld1q_dup_f32(&e1), vmulq_f32(y1, x1));
     y1 = vaddq_f32(vld1q_dup_f32(&e0), vmulq_f32(y1, x1));
     
-    i32 bias = 127;
     float32x4_t y0 = vcvtq_f32_s32(
         vsubq_s32(
-            vshrq_n_s32(log2_xi4, 23), vld1q_dup_s32(&bias)
+            vshrq_n_s32(log2_xi4, 23), vld1q_dup_s32(&C_F32_BIAS)
         )
     );
 

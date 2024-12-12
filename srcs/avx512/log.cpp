@@ -30,7 +30,7 @@ inline void _logarithm(const f32* x, f32* y)
     __m512 y0 = _mm512_cvt_roundepi32_ps(
         _mm512_sub_epi32(
             _mm512_srli_epi32(log2_xi16, 23), 
-            _mm512_set1_epi32(127)
+            _mm512_set1_epi32(C_F32_BIAS)
         ), (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)
     ); 
 

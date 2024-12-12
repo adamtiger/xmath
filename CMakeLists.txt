@@ -24,19 +24,17 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 
 # architecture identification
-option(BW_NO_INTRISICS "AVX512 intrinsic usage" OFF)
 option(BW_AVX512 "AVX512 intrinsic usage" OFF)
-option(BW_NEON "ARM NEON intrinsic usage" ON)
+option(BW_NEON "ARM NEON intrinsic usage" OFF)
 
-IF (BW_NO_INTRISICS)
-    add_compile_definitions(INTRIN_NO)
-    message("No intrinsics")
-ELSEIF (BW_AVX512)
+IF (BW_AVX512)
     add_compile_definitions(INTRIN_AVX512)
     message("AVX512 intrinsics")
 ELSEIF (BW_NEON)
     add_compile_definitions(INTRIN_NEON)
     message("ARM NEON intrinsics")
+ELSE ()
+    message("No intrinsics")
 ENDIF()
 
 
@@ -109,15 +107,15 @@ set (NEON_HEADERS
 source_group("armneon" FILES ${NEON_HEADERS} ${NEON_SRCS})
 
 
-IF (BW_NO_INTRISICS)
-    set(INTRINSIC_SRCS ${X64_SRCS})
-    set(INTRINSIC_HEADERS ${X64_HEADERS})
-ELSEIF (BW_AVX512)
+IF (BW_AVX512)
     set(INTRINSIC_SRCS ${AVX512_SRCS})
     set(INTRINSIC_HEADERS ${AVX512_HEADERS})
 ELSEIF (BW_NEON)
     set(INTRINSIC_SRCS ${NEON_SRCS})
     set(INTRINSIC_HEADERS ${NEON_HEADERS})
+ELSE ()
+    set(INTRINSIC_SRCS ${X64_SRCS})
+    set(INTRINSIC_HEADERS ${X64_HEADERS})
 ENDIF()
 
 
