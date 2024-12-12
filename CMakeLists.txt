@@ -55,6 +55,7 @@ set (SRCS_HEADERS
     ${SRCS_DIR}/core.hpp
     ${SRCS_DIR}/device.hpp
     ${SRCS_DIR}/math.hpp
+    ${SRCS_DIR}/dot.hpp
     ${SRCS_DIR}/exp.hpp
     ${SRCS_DIR}/log.hpp
 )
@@ -67,6 +68,7 @@ source_group("srcs" FILES ${SRCS_HEADERS} ${SRCS_SRCS})
 set(X64_DIR ${XMATH_ROOT}/srcs/x64)
 
 set (X64_SRCS
+    ${X64_DIR}/dot.cpp
     ${X64_DIR}/exp.cpp
     ${X64_DIR}/log.cpp
 )
@@ -82,6 +84,7 @@ source_group("x64" FILES ${X64_HEADERS} ${X64_SRCS})
 set(AVX512_DIR ${XMATH_ROOT}/srcs/avx512)
 
 set (AVX512_SRCS
+    ${AVX512_DIR}/dot.cpp
     ${AVX512_DIR}/exp.cpp
     ${AVX512_DIR}/log.cpp
 )
@@ -97,6 +100,7 @@ source_group("avx512" FILES ${AVX512_HEADERS} ${AVX512_SRCS})
 set(NEON_DIR ${XMATH_ROOT}/srcs/neon)
 
 set (NEON_SRCS
+    ${NEON_DIR}/dot.cpp
     ${NEON_DIR}/exp.cpp
     ${NEON_DIR}/log.cpp
 )
