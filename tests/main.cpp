@@ -29,6 +29,23 @@ void test_logarithm()
     }
 }
 
+void test_exponent()
+{
+    constexpr i32 length = 64;
+    f512 x_aligned[length / 16];
+    f512 y_aligned[length / 16];
+    f32* x = reinterpret_cast<f32*>(x_aligned);
+    f32* y = reinterpret_cast<f32*>(y_aligned);
+    fill_array(0.7f, 50.f, length, x);
+
+    exponent(length, x, y);
+
+    for (i32 ix = 0; ix < length; ++ix)
+    {
+        std::cout << "Index: " << ix << " - Expected: " << expf(x[ix]) << " - Actual: " << y[ix] << " - Value: " << x[ix] << std::endl;
+    }
+}
+
 
 void test_dotproduct()
 {
