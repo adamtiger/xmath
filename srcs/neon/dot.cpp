@@ -8,7 +8,7 @@ f32 dot_product(const i32 length, const f32* a, const f32* b)
     {
         float32x4_t a4 = vld1q_f32(a + ix);
         float32x4_t b4 = vld1q_f32(b + ix);
-        out4 = vfmaq_f32(a4, b4, out4);
+        out4 = vfmaq_f32(out4, a4, b4);  // first argument is the accumulator
     }
 
     f32 y0 = vgetq_lane_f32(out4, 0);

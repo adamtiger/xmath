@@ -13,7 +13,7 @@ inline void _exponent(const f32* x, f32* y)
 
     zi0 = vmulq_s32(zi0, vsubq_s32(vdupq_n_s32(1), vmulq_s32(vdupq_n_s32(2), is_z_neg)));
 
-    int32x4_t zi0_positive = vcgtq_s32(zi0, vdupq_n_s32(0));
+    int32x4_t zi0_positive = vreinterpretq_s32_u32(vcgtq_s32(zi0, vdupq_n_s32(0)));
     float32x4_t y0_pos = vcvtq_f32_s32(vshlq_s32(vdupq_n_s32(2), vsubq_s32(zi0, vdupq_n_s32(1))));
     float32x4_t y0 = vaddq_f32(
         vmulq_f32(y0_pos, vcvtq_f32_s32(zi0_positive)), 
