@@ -73,7 +73,8 @@ int main()
 {
     std::cout << "XMath implementations with intrinsics." << std::endl;
     //test_logarithm();
-    test_dotproduct();
+    test_exponent();
+    //test_dotproduct();
     
     return 0;
 }
